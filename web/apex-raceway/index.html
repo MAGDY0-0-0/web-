@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>APEX RACEWAY | Performance Motors</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <div id="toast-container"></div>
+
+    <header>
+        <a href="#" class="logo" id="logo-link">APEX<span>RACEWAY</span></a>
+        <nav id="main-nav">
+            <a href="#" id="nav-paddock">PADDOCK</a>
+            <a href="#" id="nav-maintenance">MAINTENANCE</a>
+            <a href="#" id="nav-parts">PARTS SHOP</a>
+            <a href="#" id="sign-in-link">SIGN IN</a>
+        </nav>
+    </header>
+
+    <div id="authModal">
+        <div class="auth-card">
+            <h2 id="modalTitle">SIGN IN</h2>
+            <input type="email" id="email" placeholder="EMAIL ADDRESS">
+            <input type="password" id="password" placeholder="PASSWORD">
+            <button id="authActionBtn">START ENGINES</button>
+            <p id="switchText" class="switch-text">New to the track? Join the Team</p>
+            <button id="cancelAuthBtn" class="cancel-btn">CANCEL</button>
+        </div>
+    </div>
+
+    <div id="home-view">
+        <section class="filter-bar" id="inventory">
+            <input type="text" id="searchBar" placeholder="SEARCH MANUFACTURER...">
+            <select id="categoryFilter">
+                <option value="all">ALL CLASSES</option>
+                <option value="Hypercar">HYPERCAR</option>
+                <option value="Supercar">SUPERCAR</option>
+                <option value="Luxury SUV">LUXURY SUV</option>
+                <option value="Track">TRACK EDITION</option>
+            </select>
+            <select id="sortFilter">
+                <option value="default">SORT: DEFAULT</option>
+                <option value="price-asc">PRICE: LOW → HIGH</option>
+                <option value="price-desc">PRICE: HIGH → LOW</option>
+                <option value="hp-desc">HORSEPOWER: HIGHEST</option>
+                <option value="speed-desc">TOP SPEED: FASTEST</option>
+            </select>
+        </section>
+        <div class="car-grid" id="carGrid"></div>
+    </div>
+
+    <div id="details-page">
+        <button class="back-btn" id="back-btn">← BACK TO INVENTORY</button>
+        <div id="car-details-content"></div>
+    </div>
+
+    <div id="dashboard-view">
+        <div class="section-hero">
+            <div class="section-hero-inner">
+                <p class="section-label">🏎️ DRIVER PROFILE</p>
+                <h1>MY GARAGE</h1>
+                <p class="section-sub">Your vehicles, service history &amp; parts orders</p>
+            </div>
+        </div>
+        <div id="dash-auth-prompt" class="auth-prompt dash-auth-prompt">
+            <p>🔒 Sign in to view your personal dashboard</p>
+            <button class="inquiry-btn" onclick="openAuth()" style="width:auto;padding:15px 40px;">SIGN IN</button>
+        </div>
+        <div id="dash-content" class="dashboard-container">
+            <div class="dashboard-section">
+                <div class="dash-section-header">
+                    <h2 class="dash-section-title">🚗 MY VEHICLES</h2>
+                    <span class="dash-section-sub">Cars you've inquired about</span>
+                </div>
+                <div id="dash-inquiries" class="dash-cards"></div>
+            </div>
+            <div class="dashboard-section">
+                <div class="dash-section-header">
+                    <h2 class="dash-section-title">⚙️ SERVICE HISTORY</h2>
+                    <span class="dash-section-sub">Your scheduled maintenance</span>
+                </div>
+                <div id="dash-maintenance" class="dash-cards"></div>
+            </div>
+            <div class="dashboard-section">
+                <div class="dash-section-header">
+                    <h2 class="dash-section-title">📦 PARTS ORDERS</h2>
+                    <span class="dash-section-sub">Your parts order history</span>
+                </div>
+                <div id="dash-orders" class="dash-cards"></div>
+            </div>
+        </div>
+    </div>
+
+    <div id="maintenance-view">
+        <div class="section-hero">
+            <div class="section-hero-inner">
+                <p class="section-label">⚙️ APEX SERVICE CENTER</p>
+                <h1>SCHEDULE MAINTENANCE</h1>
+                <p class="section-sub">Expert care for your high-performance vehicle</p>
+            </div>
+        </div>
+        <div class="maintenance-container">
+            <div id="maintenance-signin-prompt" class="auth-prompt">
+                <p>🔒 Sign in to schedule maintenance for your vehicle</p>
+                <button class="inquiry-btn" onclick="openAuth()" style="width:auto; padding:15px 40px;">SIGN IN</button>
+            </div>
+            <div id="maintenance-form-wrap">
+                <form id="maintenance-form" onsubmit="submitMaintenance(event)">
+                    <div class="form-group">
+                        <label>YOUR VEHICLE</label>
+                        <select id="maintenance-car">
+                            <option value="">Loading your vehicles...</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>SERVICE TYPE</label>
+                        <select id="service-type">
+                            <option>Oil & Filter Change</option>
+                            <option>Brake Inspection & Service</option>
+                            <option>Tire Rotation & Balancing</option>
+                            <option>Engine Tune-Up</option>
+                            <option>Full Vehicle Detail</option>
+                            <option>Suspension Check & Alignment</option>
+                            <option>AC & Climate Service</option>
+                            <option>Transmission Service</option>
+                            <option>Full Pre-Track Inspection</option>
+                        </select>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>PREFERRED DATE</label>
+                            <input type="date" id="service-date">
+                        </div>
+                        <div class="form-group">
+                            <label>TIME SLOT</label>
+                            <select id="service-time">
+                                <option>Morning — 08:00 to 10:00</option>
+                                <option>Midday — 11:00 to 13:00</option>
+                                <option>Afternoon — 14:00 to 16:00</option>
+                                <option>Evening — 17:00 to 19:00</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>ADDITIONAL NOTES <span class="optional">(optional)</span></label>
+                        <textarea id="service-notes" placeholder="Describe any issues or special requests..."></textarea>
+                    </div>
+                    <button type="submit" class="inquiry-btn">⚙️ SCHEDULE SERVICE</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div id="parts-view">
+        <div class="section-hero">
+            <div class="section-hero-inner">
+                <p class="section-label">🔩 APEX PARTS SHOP</p>
+                <h1>SPARE PARTS CATALOG</h1>
+                <p class="section-sub">Genuine performance parts for your machine</p>
+            </div>
+        </div>
+        <section class="filter-bar">
+            <input type="text" id="partsSearch" placeholder="SEARCH PARTS...">
+            <select id="partsCategoryFilter">
+                <option value="all">ALL CATEGORIES</option>
+                <option value="Engine">ENGINE</option>
+                <option value="Brakes">BRAKES</option>
+                <option value="Suspension">SUSPENSION</option>
+                <option value="Exhaust">EXHAUST</option>
+                <option value="Wheels & Tires">WHEELS & TIRES</option>
+                <option value="Electronics">ELECTRONICS</option>
+                <option value="Body">BODY</option>
+                <option value="Interior">INTERIOR</option>
+            </select>
+        </section>
+        <div class="parts-grid" id="partsGrid"></div>
+    </div>
+
+    <button id="cart-btn" class="cart-float-btn">
+        🛒 <span id="cart-count">0</span>
+    </button>
+
+    <div id="cart-modal">
+        <div class="cart-panel">
+            <div class="cart-header">
+                <h2>YOUR CART</h2>
+                <button id="close-cart" class="close-cart-btn">✕</button>
+            </div>
+            <div id="cart-items" class="cart-items"></div>
+            <div class="cart-footer">
+                <div class="cart-total-row">
+                    <span>TOTAL</span>
+                    <span id="cart-total">$0</span>
+                </div>
+                <button id="place-order-btn" class="inquiry-btn">PLACE ORDER</button>
+            </div>
+        </div>
+    </div>
+
+    <footer id="site-footer">
+        <div class="footer-grid">
+            <div class="footer-brand">
+                <div class="logo footer-logo">APEX<span>RACEWAY</span></div>
+                <p class="footer-tagline">The pinnacle of automotive excellence. Performance without compromise.</p>
+            </div>
+            <div class="footer-col">
+                <h4 class="footer-heading">NAVIGATE</h4>
+                <a href="#" onclick="showHome()">Paddock</a>
+                <a href="#" onclick="showMaintenance()">Maintenance</a>
+                <a href="#" onclick="showParts()">Parts Shop</a>
+            </div>
+            <div class="footer-col">
+                <h4 class="footer-heading">SERVICES</h4>
+                <a href="#">Car Inquiries</a>
+                <a href="#">Service Scheduling</a>
+                <a href="#">Parts Orders</a>
+            </div>
+            <div class="footer-col">
+                <h4 class="footer-heading">CONTACT</h4>
+                <p>📍 Apex Circuit, Dubai, UAE</p>
+                <p>📞 +971 4 000 0000</p>
+                <p>✉️ info@apexraceway.ae</p>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>© 2026 APEX RACEWAY — Performance Without Compromise.</p>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+    <script src="auth.js"></script>
+
+</body>
+</html>
